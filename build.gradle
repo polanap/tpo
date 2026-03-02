@@ -21,4 +21,26 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
+    testLogging {
+        events "failed"
+        exceptionFormat "short"
+    }
+
+    afterTest { desc, result ->
+        if (result.resultType.toString() == "SUCCESS") {
+            println "[OK] ${desc.className} :: ${desc.displayName}"
+        } else if (result.resultType.toString() == "FAILURE") {
+            println "[FAILED] ${desc.className} :: ${desc.displayName}"
+        }
+    }
+
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "Итог: ${result.testCount} тестов, " +
+                    "${result.successfulTestCount} успешных, " +
+                    "${result.failedTestCount} упало, " +
+                    "${result.skippedTestCount} пропущено"
+        }
+    }
 }

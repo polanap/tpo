@@ -1,15 +1,16 @@
 package org.example;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class SkewHeapTest {
 
+    @DisplayName("Вставка в пустую кучу: трасса совпадает с эталоном")
     @Test
     void traceForInsertIntoEmptyHeapMatchesReference() {
         SkewHeap heap = new SkewHeap();
@@ -27,6 +28,7 @@ class SkewHeapTest {
         assertEquals(5, heap.peekMin());
     }
 
+    @DisplayName("Вставка с перестановкой корней: трасса совпадает с эталоном")
     @Test
     void traceForInsertWithRootSwapMatchesReference() {
         SkewHeap heap = new SkewHeap();
@@ -50,6 +52,7 @@ class SkewHeapTest {
         assertEquals(3, heap.peekMin());
     }
 
+    @DisplayName("Извлечение минимума: трасса совпадает с эталоном")
     @Test
     void traceForExtractMinMatchesReference() {
         SkewHeap heap = new SkewHeap();
@@ -70,6 +73,7 @@ class SkewHeapTest {
         assertEquals(5, heap.peekMin());
     }
 
+    @DisplayName("Последовательность извлечения отсортирована для смешанных данных")
     @Test
     void extractionOrderIsSortedForMixedInputData() {
         SkewHeap heap = new SkewHeap();
@@ -83,6 +87,7 @@ class SkewHeapTest {
             assertEquals(expectedMin, heap.extractMin());
         }
         assertEquals(0, heap.size());
-        assertThrows(NoSuchElementException.class, heap::extractMin);
+        NoSuchElementException ex = assertThrows(NoSuchElementException.class, heap::extractMin);
+        assertEquals("Куча пуста", ex.getMessage());
     }
 }

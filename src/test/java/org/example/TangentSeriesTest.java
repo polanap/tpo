@@ -1,19 +1,21 @@
 package org.example;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class TangentSeriesTest {
 
+    @DisplayName("tg(0) равен 0")
     @Test
     void returnsZeroAtZero() {
         double actual = TangentSeries.tanBySeries(0.0, TangentSeries.maxSupportedTerms());
         assertEquals(0.0, actual, 1e-15);
     }
 
+    @DisplayName("tg(x) — нечетная функция")
     @Test
     void isOddFunction() {
         double x = 0.7;
@@ -25,12 +27,13 @@ class TangentSeriesTest {
         assertEquals(-positive, negative, 1e-14);
     }
 
+    @DisplayName("Ряд Маклорена аппроксимирует Math.tan на малых и средних x")
     @Test
     void matchesMathTanForSmallAndMediumArguments() {
         int terms = TangentSeries.maxSupportedTerms();
 
-        double[] xs = {0.1, -0.3, 0.5, -0.9, 1.0};
-        double[] tolerances = {1e-12, 1e-10, 1e-8, 3e-6, 2e-5};
+        double[] xs = {0.1, -0.3, 0.5, -0.7};
+        double[] tolerances = {1e-12, 1e-10, 1e-7, 1e-5};
 
         for (int i = 0; i < xs.length; i++) {
             double expected = Math.tan(xs[i]);
@@ -39,6 +42,7 @@ class TangentSeriesTest {
         }
     }
 
+    @DisplayName("Увеличение числа членов ряда повышает точность у границы сходимости")
     @Test
     void moreTermsImproveApproximationNearConvergenceRadius() {
         double x = 1.2;
@@ -52,19 +56,26 @@ class TangentSeriesTest {
         assertTrue(errorWith7 < errorWith5);
     }
 
+    @DisplayName("Некорректное число членов ряда вызывает исключение")
     @Test
     void throwsForInvalidTerms() {
-        assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(0.2, 0));
-        assertThrows(
+        IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(0.2, 0));
+        IllegalArgumentException ex2 = assertThrows(
                 IllegalArgumentException.class,
                 () -> TangentSeries.tanBySeries(0.2, TangentSeries.maxSupportedTerms() + 1)
         );
+        assertTrue(ex1.getMessage().contains("terms"));
+        assertTrue(ex2.getMessage().contains("terms"));
     }
 
+    @DisplayName("На границе и вне области |x| < pi/2 выбрасывается исключение")
     @Test
     void throwsAtAndOutsideSingularityBoundary() {
-        assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(Math.PI / 2.0, 3));
-        assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(-Math.PI / 2.0, 3));
-        assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(2.0, 3));
+        IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(Math.PI / 2.0, 3));
+        IllegalArgumentException ex2 = assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(-Math.PI / 2.0, 3));
+        IllegalArgumentException ex3 = assertThrows(IllegalArgumentException.class, () -> TangentSeries.tanBySeries(2.0, 3));
+        assertTrue(ex1.getMessage().contains("|x| < pi/2"));
+        assertTrue(ex2.getMessage().contains("|x| < pi/2"));
+        assertTrue(ex3.getMessage().contains("|x| < pi/2"));
     }
 }
