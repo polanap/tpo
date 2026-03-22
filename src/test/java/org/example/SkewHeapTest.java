@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class SkewHeapTest {
 
-    @DisplayName("Вставка в пустую кучу: трасса совпадает с эталоном")
+    @DisplayName("<skrewHeap> Тест #1: Вставка в пустую кучу: трасса совпадает с эталоном")
     @Test
     void traceForInsertIntoEmptyHeapMatchesReference() {
         SkewHeap heap = new SkewHeap();
@@ -28,7 +28,7 @@ class SkewHeapTest {
         assertEquals(5, heap.peekMin());
     }
 
-    @DisplayName("Вставка с перестановкой корней: трасса совпадает с эталоном")
+    @DisplayName("<skrewHeap> Тест #2: Вставка с перестановкой корней: трасса совпадает с эталоном")
     @Test
     void traceForInsertWithRootSwapMatchesReference() {
         SkewHeap heap = new SkewHeap();
@@ -52,7 +52,7 @@ class SkewHeapTest {
         assertEquals(3, heap.peekMin());
     }
 
-    @DisplayName("Извлечение минимума: трасса совпадает с эталоном")
+    @DisplayName("<skrewHeap> Тест #3: Извлечение минимума: трасса совпадает с эталоном")
     @Test
     void traceForExtractMinMatchesReference() {
         SkewHeap heap = new SkewHeap();
@@ -73,7 +73,7 @@ class SkewHeapTest {
         assertEquals(5, heap.peekMin());
     }
 
-    @DisplayName("Последовательность извлечения отсортирована для смешанных данных")
+    @DisplayName("<skrewHeap> Тест #4: Последовательность извлечения отсортирована для смешанных данных")
     @Test
     void extractionOrderIsSortedForMixedInputData() {
         SkewHeap heap = new SkewHeap();

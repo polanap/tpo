@@ -24,29 +24,34 @@ public final class TangentSeries {
      * c_n = (-1)^(n-1) * 2^(2n) * (2^(2n) - 1) * B_(2n) / (2n)!.
      *
      * @param x аргумент в радианах, должен удовлетворять |x| < pi/2
-     * @param terms количество членов ряда, от 1 до {@link #maxSupportedTerms()}
+     * @param accuracy требуемая абсолютная точность
      * @return приближенное значение tan(x)
      */
-    public static double tanBySeries(double x, int terms) {
-        if (terms < 1 || terms > MAX_SUPPORTED_TERMS) {
-            throw new IllegalArgumentException(
-                    "Параметр terms должен быть в диапазоне [1, " + MAX_SUPPORTED_TERMS + "], получено: " + terms
-            );
+    public static double tanBySeries(double x, double accuracy) {
+        if (!Double.isFinite(accuracy) || accuracy <= 0.0) {
+            throw new IllegalArgumentException("Параметр accuracy должен быть положительным конечным числом");
         }
         if (Math.abs(x) >= HALF_PI - DOMAIN_EPS) {
             throw new IllegalArgumentException("Аргумент x должен удовлетворять условию |x| < pi/2 для данного ряда");
         }
 
-        BigDecimal[] bernoulli = bernoulliNumbersUpTo(2 * terms);
+        BigDecimal[] bernoulli = bernoulliNumbersUpTo(2 * MAX_SUPPORTED_TERMS);
         double sum = 0.0;
         double power = x; // Текущая степень x^(2n-1), начинается с x^1 при n = 1
         double x2 = x * x;
-        for (int n = 1; n <= terms; n++) {
+        for (int n = 1; n <= MAX_SUPPORTED_TERMS; n++) {
             double coefficient = tangentCoefficient(n, bernoulli[2 * n]);
-            sum += coefficient * power;
+            double term = coefficient * power;
+            sum += term;
+            if (Math.abs(term) <= accuracy) {
+                return sum;
+            }
             power *= x2;
         }
-        return sum;
+        throw new IllegalArgumentException(
+                "Не удалось достичь требуемой точности " + accuracy
+                        + " за " + MAX_SUPPORTED_TERMS + " членов ряда"
+        );
     }
 
     private static double tangentCoefficient(int n, BigDecimal bernoulli2n) {
