@@ -90,4 +90,97 @@ class StoryDomainModelTest {
         assertFalse(arthur.isJawDropped());
         assertEquals(0, arthur.unbelievableThingsCount());
     }
+
+    @DisplayName("<storyDomainModel> Тест #6: SceneAnalyzer находит пустой список аномалий при нормальной сцене")
+    @Test
+    void analyzeNoAnomaliesWhenAllFlagsFalse() {
+        TwoHeadedPerson person = new TwoHeadedPerson(
+                false,
+                true,
+                false,
+                false,
+                HeadState.NEUTRAL,
+                HeadState.NEUTRAL
+        );
+
+        SceneAnalyzer analyzer = new SceneAnalyzer();
+        ObservationReport report = analyzer.analyze(person);
+
+        assertTrue(report.anomalies().isEmpty());
+        assertEquals(0, report.anomalyCount());
+    }
+
+    @DisplayName("<storyDomainModel> Тест #7: Тестирование каждой ветки добавления аномалии TWO_HEADS")
+    @Test
+    void analyzeOnlyTwoHeadsAddsOnlyTwoHeadsAnomaly() {
+        TwoHeadedPerson person = new TwoHeadedPerson(
+                true,
+                true,
+                false,
+                false,
+                HeadState.NEUTRAL,
+                HeadState.NEUTRAL
+        );
+
+        SceneAnalyzer analyzer = new SceneAnalyzer();
+        ObservationReport report = analyzer.analyze(person);
+
+        assertEquals(List.of(AnomalyType.TWO_HEADS), report.anomalies());
+    }
+
+    @DisplayName("<storyDomainModel> Тест #8: SceneAnalyzer добавляет RIGHT_HEAD_BUSY_LEFT_HEAD_SMILING только по состояниям голов")
+    @Test
+    void analyzeCompoundHeadConditionAddsOnlyCompoundAnomaly() {
+        TwoHeadedPerson person = new TwoHeadedPerson(
+                false,
+                true,
+                false,
+                false,
+                HeadState.SMILING_WIDE_RELAXED,
+                HeadState.BUSY_WITH_TEETH_PICKING
+        );
+
+        SceneAnalyzer analyzer = new SceneAnalyzer();
+        ObservationReport report = analyzer.analyze(person);
+
+        assertEquals(List.of(AnomalyType.RIGHT_HEAD_BUSY_LEFT_HEAD_SMILING), report.anomalies());
+    }
+
+    @DisplayName("<storyDomainModel> Тест #9: RIGHT busy, но left не улыбается — составная аномалия не добавляется")
+    @Test
+    void analyzeCompoundHeadConditionNotAddedWhenLeftStateNotSmiling() {
+        TwoHeadedPerson person = new TwoHeadedPerson(
+                false,
+                true,
+                false,
+                false,
+                HeadState.NEUTRAL,
+                HeadState.BUSY_WITH_TEETH_PICKING
+        );
+
+        SceneAnalyzer analyzer = new SceneAnalyzer();
+        ObservationReport report = analyzer.analyze(person);
+
+        assertTrue(report.anomalies().isEmpty());
+        assertEquals(0, report.anomalyCount());
+    }
+
+    @DisplayName("<storyDomainModel> Тест #10: Left улыбается, но RIGHT не занята — составная аномалия не добавляется")
+    @Test
+    void analyzeCompoundHeadConditionNotAddedWhenRightStateNotBusy() {
+        TwoHeadedPerson person = new TwoHeadedPerson(
+                false,
+                true,
+                false,
+                false,
+                HeadState.SMILING_WIDE_RELAXED,
+                HeadState.NEUTRAL
+        );
+
+        SceneAnalyzer analyzer = new SceneAnalyzer();
+        ObservationReport report = analyzer.analyze(person);
+
+        assertTrue(report.anomalies().isEmpty());
+        assertEquals(0, report.anomalyCount());
+    }
 }

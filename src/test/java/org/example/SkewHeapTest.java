@@ -90,4 +90,22 @@ class SkewHeapTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class, heap::extractMin);
         assertEquals("Куча пуста", ex.getMessage());
     }
+
+    @DisplayName("<skrewHeap> Тест #5: peekMin() на пустой куче выбрасывает исключение")
+    @Test
+    void peekMinOnEmptyHeapThrows() {
+        SkewHeap heap = new SkewHeap();
+
+        NoSuchElementException ex = assertThrows(NoSuchElementException.class, heap::peekMin);
+        assertEquals("Куча пуста", ex.getMessage());
+    }
+
+    @DisplayName("<skrewHeap> Тест #6: extractMinWithTrace() на пустой куче выбрасывает исключение")
+    @Test
+    void extractMinWithTraceOnEmptyHeapThrows() {
+        SkewHeap heap = new SkewHeap();
+
+        NoSuchElementException ex = assertThrows(NoSuchElementException.class, heap::extractMinWithTrace);
+        assertEquals("Куча пуста", ex.getMessage());
+    }
 }

@@ -1,6 +1,7 @@
 package org.example.story;
 
 public final class TwoHeadedPerson {
+    private final boolean twoHeads;
     private final boolean reclinedInArmchair;
     private final boolean feetOnControlPanel;
     private final boolean leftHandPicksRightHeadTeeth;
@@ -8,12 +9,14 @@ public final class TwoHeadedPerson {
     private final HeadState rightHeadState;
 
     public TwoHeadedPerson(
+            boolean twoHeads,
             boolean reclinedInArmchair,
             boolean feetOnControlPanel,
             boolean leftHandPicksRightHeadTeeth,
             HeadState leftHeadState,
             HeadState rightHeadState
     ) {
+        this.twoHeads = twoHeads;
         this.reclinedInArmchair = reclinedInArmchair;
         this.feetOnControlPanel = feetOnControlPanel;
         this.leftHandPicksRightHeadTeeth = leftHandPicksRightHeadTeeth;
@@ -23,6 +26,7 @@ public final class TwoHeadedPerson {
 
     public static TwoHeadedPerson fromTextScene() {
         return new TwoHeadedPerson(
+                true,
                 true,
                 true,
                 true,
@@ -52,6 +56,6 @@ public final class TwoHeadedPerson {
     }
 
     public boolean hasTwoHeads() {
-        return true;
+        return twoHeads;
     }
 }

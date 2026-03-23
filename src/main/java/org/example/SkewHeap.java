@@ -59,10 +59,6 @@ public final class SkewHeap {
         return size;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     public int peekMin() {
         if (root == null) {
             throw new NoSuchElementException("Куча пуста");

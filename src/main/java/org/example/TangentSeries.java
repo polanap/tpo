@@ -14,10 +14,6 @@ public final class TangentSeries {
     private TangentSeries() {
     }
 
-    public static int maxSupportedTerms() {
-        return MAX_SUPPORTED_TERMS;
-    }
-
     /**
      * Вычисляет tan(x) по конечной сумме ряда Маклорена.
      * Коэффициенты вычисляются динамически по формуле через числа Бернулли:
@@ -89,9 +85,6 @@ public final class TangentSeries {
     }
 
     private static BigInteger binomial(int n, int k) {
-        if (k < 0 || k > n) {
-            return BigInteger.ZERO;
-        }
         int effectiveK = Math.min(k, n - k);
         BigInteger result = BigInteger.ONE;
         for (int i = 1; i <= effectiveK; i++) {
