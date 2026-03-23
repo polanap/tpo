@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 class StoryDomainModelTest {
 
-    @DisplayName("Сцена из текста корректно проецируется в доменную модель")
+    @DisplayName("<storyDomainModel> Тест #1: Сцена из текста корректно проецируется в доменную модель")
     @Test
     void sceneFromTextIsMappedToDomainModel() {
         TwoHeadedPerson person = TwoHeadedPerson.fromTextScene();
@@ -29,7 +29,7 @@ class StoryDomainModelTest {
         assertEquals(HeadState.BUSY_WITH_TEETH_PICKING, person.rightHeadState());
     }
 
-    @DisplayName("Последовательность аномалий совпадает с эталоном")
+    @DisplayName("<storyDomainModel> Тест #2: Последовательность аномалий совпадает с эталоном")
     @Test
     void anomaliesSequenceMatchesReference() {
         TwoHeadedPerson person = TwoHeadedPerson.fromTextScene();
@@ -47,7 +47,7 @@ class StoryDomainModelTest {
         assertEquals(4, report.anomalyCount());
     }
 
-    @DisplayName("Артур при наблюдении аномалий ошеломлен и роняет челюсть")
+    @DisplayName("<storyDomainModel> Тест #3: Артур при наблюдении аномалий ошеломлен и роняет челюсть")
     @Test
     void arthurBecomesAstonishedAndJawDrops() {
         Arthur arthur = new Arthur();
@@ -64,7 +64,7 @@ class StoryDomainModelTest {
         assertEquals(4, arthur.unbelievableThingsCount());
     }
 
-    @DisplayName("Количество невероятных вещей растет при повторных наблюдениях")
+    @DisplayName("<storyDomainModel> Тест #4: Количество невероятных вещей растет при повторных наблюдениях")
     @Test
     void unbelievableThingsCountKeepsGrowing() {
         Arthur arthur = new Arthur();
@@ -72,12 +72,13 @@ class StoryDomainModelTest {
         ObservationReport report = analyzer.analyze(TwoHeadedPerson.fromTextScene());
 
         arthur.observe(report);
-        arthur.observe(report);
+        assertEquals(4, arthur.unbelievableThingsCount());
 
+        arthur.observe(report);
         assertEquals(8, arthur.unbelievableThingsCount());
     }
 
-    @DisplayName("Если аномалий нет, Артур не ошеломлен и челюсть не отвисает")
+    @DisplayName("<storyDomainModel> Тест #5: Если аномалий нет, Артур не ошеломлен и челюсть не отвисает")
     @Test
     void noAnomaliesMeansNoAstonishment() {
         Arthur arthur = new Arthur();
